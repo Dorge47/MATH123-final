@@ -1,6 +1,6 @@
 import json
 file_in = "openfoodfacts-products.jsonl" # https://world.openfoodfacts.org/data#:~:text=JSONL%20data%20export
-file_out = "filtered_items.jsonl" # https://raw.githubusercontent.com/Dorge47/MATH123-final/refs/heads/main/filtered_items.jsonl
+file_out = "filtered_items_narrow.jsonl" # https://raw.githubusercontent.com/Dorge47/MATH123-final/refs/heads/main/filtered_items_narrow.jsonl
 file_prices = "prices.jsonl" # https://prices.openfoodfacts.org/data/prices.jsonl.gz
 count_in = 0
 count_out = 0
@@ -11,6 +11,16 @@ keep_properties = [ # These are the only properties we care about
     "serving_size",
     "nutriscore_grade",
     "nutriments"
+]
+required_nutrients = [ # Every item must have these per-serving nutrient values defined
+    "energy-kcal_serving",
+    "fiber_serving",
+    "sugars_serving",
+    "fat_serving",
+    "calcium_serving",
+    "carbohydrates_serving",
+    "cholesterol_serving",
+    "proteins_serving"
 ]
 
 price_by_code = {} # Define a dict with price data for quick lookup
@@ -64,7 +74,7 @@ with open(file_in, "r", encoding="utf-8") as fin, \
         nutriments = item.get("nutriments")
         if not nutriments:
             continue
-        if "energy-kcal_serving" not in nutriments:
+        if not all(nutrient in nutriments for nutrient in required_nutrients):
             continue
         filtered_item = { # Ditch any properties not in keep_properties list
             key: item[key]
