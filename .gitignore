@@ -4,4 +4,5 @@
 *.json
 *.jsonl
 !filtered_items.jsonl
+!filtered_items_narrow.jsonl
 .DS_STORE
