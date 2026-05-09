@@ -1,0 +1,7 @@
+.vscode/
+.venv/
+*.js
+*.json
+*.jsonl
+!filtered_items.jsonl
+.DS_STORE
